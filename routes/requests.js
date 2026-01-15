@@ -3,7 +3,7 @@ const router = express.Router();
 const Request = require("../models/Request");
 
 // TEST ROUTE
-router.get("/", (req, res) => {
+router.get("/test", (req, res) => {
   res.send("REQUEST ROUTER WORKING");
 });
 
