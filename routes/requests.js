@@ -4,7 +4,7 @@ const Request = require("../models/Request");
 
 // TEST ROUTE
 router.get("/", (req, res) => {
-  res.send("Request API running");
+  res.send("REQUEST ROUTER WORKING");
 });
 
 // CREATE REQUEST
