@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background-image:url("https://media.gettyimages.com/id/1280649926/video/abstract-soft-shiny-background-business-motion-graphics-abstract-simple-beatiful-motion.jpg?s=640x640&k=20&c=JvWt3KjeQlt5jD_Q-PZeBdcRJORHtgLKSM-RfPtaYpM=  ");
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    .nav {
+      background: rgba(0,0,0,0.7);
+      color: white;
+      padding: 15px;
+    }
+
+    .container {
+      margin-top: 80px;
+    }
+
+    button {
+      padding: 12px;
+      width: 220px;
+      margin: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="nav">CampusConnect Dashboard</div>
+
+  <div class="container">
+    <button onclick="location.href='create.html'">Create Request</button>
+    <button onclick="location.href='browse.html'">Browse Requests</button>
+  </div>
+  <div id="requests"></div>
+  <script src="dashboard.js"></script>
+</body>
+</html>
