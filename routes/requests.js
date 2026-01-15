@@ -2,44 +2,69 @@ const express = require("express");
 const router = express.Router();
 const Request = require("../models/Request");
 
-// TEST ROUTE
-router.get("/test", (req, res) => {
-  res.send("REQUEST ROUTER WORKING");
-});
 
-// CREATE REQUEST
+// ===============================
+// CREATE A NEW REQUEST
+// POST /api/requests
+// ===============================
 router.post("/", async (req, res) => {
-  const { title, description } = req.body;
+  try {
+    const { title, description } = req.body;
 
-  const newRequest = new Request({
-    title,
-    description,
-    status: "open"
-  });
+    if (!title || !description) {
+      return res.status(400).json({ message: "Title and description are required" });
+    }
 
-  await newRequest.save();
-  res.json({ message: "Request created" });
+    const newRequest = new Request({
+      title,
+      description,
+      status: "open"
+    });
+
+    await newRequest.save();
+    res.status(201).json({ message: "Request created successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
-// GET OPEN REQUESTS
+
+// ===============================
+// GET ALL REQUESTS
+// GET /api/requests
+// ===============================
 router.get("/", async (req, res) => {
-  const requests = await Request.find({ status: "open" });
-  res.json(requests);
+  try {
+    const requests = await Request.find().sort({ createdAt: -1 });
+    res.status(200).json(requests);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
-// ACCEPT REQUEST
+
+// ===============================
+// ACCEPT A REQUEST
+// PUT /api/requests/:id/accept
+// ===============================
 router.put("/:id/accept", async (req, res) => {
-  await Request.findByIdAndUpdate(req.params.id, {
-    status: "accepted"
-  });
+  try {
+    const updatedRequest = await Request.findByIdAndUpdate(
+      req.params.id,
+      { status: "accepted" },
+      { new: true }
+    );
 
-  res.json({ message: "Request accepted" });
+    if (!updatedRequest) {
+      return res.status(404).json({ message: "Request not found" });
+    }
+
+    res.status(200).json({ message: "Request accepted", updatedRequest });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 });
 
-// GET ACCEPTED REQUESTS
-router.get("/accepted", async (req, res) => {
-  const accepted = await Request.find({ status: "accepted" });
-  res.json(accepted);
-});
 
+// ===============================
 module.exports = router;
