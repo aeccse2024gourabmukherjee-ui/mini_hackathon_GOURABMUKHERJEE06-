@@ -51,46 +51,43 @@
   </div>
 
   <!-- INLINE JAVASCRIPT -->
-  <script>
-    const API_BASE = "https://mini-hackathon-gourabmukherjee06.onrender.com";
+    <script>
+document.addEventListener("DOMContentLoaded", async () => {
+    const container = document.getElementById("acceptedList"); // ✅ FIXED ID
 
-async function loadAccepted() {
-  const container = document.getElementById("acceptedList");
-  if (!container) return;
+    try {
+        const res = await fetch("http://localhost:3000/api/requests");
+        const data = await res.json();
 
-  container.innerHTML = "Loading accepted requests...";
+        container.innerHTML = "";
 
-  try {
-    const res = await fetch(`${API_BASE}/api/requests`);
-    const requests = await res.json();
+        data.forEach(req => {
+            if (req.status !== "accepted") return;
+            if (!req.title || !req.description) return;
 
-    const accepted = requests.filter(r => r.status === "accepted");
+            const card = document.createElement("div");
+            card.className = "card";
 
-    container.innerHTML = "";
+            card.innerHTML = `
+                <h3>${req.title}</h3>
+                <p>${req.description}</p>
+                <small>Status: Accepted</small>
+            `;
 
-    if (accepted.length === 0) {
-      container.innerHTML = "<p>No accepted requests</p>";
-      return;
+            container.appendChild(card);
+        });
+
+        if (container.innerHTML === "") {
+            container.innerHTML = "<p>No accepted requests yet.</p>";
+        }
+
+    } catch (err) {
+        console.error(err);
+        container.innerHTML = "<p>Error loading accepted requests.</p>";
     }
+});
 
-    accepted.forEach(req => {
-      const div = document.createElement("div");
-      div.className = "card";
-
-      div.innerHTML = `
-        <h3>${req.title}</h3>
-        <p>${req.description}</p>
-      `;
-
-      container.appendChild(div);
-    });
-  } catch (err) {
-    container.innerHTML = "Error loading accepted requests";
-    console.error(err);
-  }
-}
-
-document.addEventListener("DOMContentLoaded", loadAccepted);
+    
 </script>
     
   
