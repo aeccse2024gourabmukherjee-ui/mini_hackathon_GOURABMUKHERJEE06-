@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Accepted Requests</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: white;
+    }
+
+    h1 {
+      margin-top: 40px;
+    }
+
+    #acceptedList {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 350px;
+    }
+
+    .card {
+      background: white;
+      color: black;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    .card h3 {
+      margin: 0 0 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Accepted Requests</h1>
+
+  <div id="acceptedList">
+    Loading...
+  </div>
+
+  <!-- INLINE JAVASCRIPT -->
+  <script>
+    const API_BASE = "https://mini-hackathon-gourabmukherjee06.onrender.com";
+
+async function loadAccepted() {
+  const container = document.getElementById("acceptedList");
+  if (!container) return;
+
+  container.innerHTML = "Loading accepted requests...";
+
+  try {
+    const res = await fetch(`${API_BASE}/api/requests`);
+    const requests = await res.json();
+
+    const accepted = requests.filter(r => r.status === "accepted");
+
+    container.innerHTML = "";
+
+    if (accepted.length === 0) {
+      container.innerHTML = "<p>No accepted requests</p>";
+      return;
+    }
+
+    accepted.forEach(req => {
+      const div = document.createElement("div");
+      div.className = "card";
+
+      div.innerHTML = `
+        <h3>${req.title}</h3>
+        <p>${req.description}</p>
+      `;
+
+      container.appendChild(div);
+    });
+  } catch (err) {
+    container.innerHTML = "Error loading accepted requests";
+    console.error(err);
+  }
+}
+
+document.addEventListener("DOMContentLoaded", loadAccepted);
+</script>
+    
+  
+  
+
+</body>
+</html>
