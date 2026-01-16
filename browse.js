@@ -1,52 +1,52 @@
-const API_BASE = "https://mini-hackathon-gourabmukherjee06.onrender.com";
+const API_URL = "https://mini-hackathon-gourabmukherjee06.onrender.com";
 
-async function loadRequests() {
-  const container = document.getElementById("requestList");
-  if (!container) return;
+const requestContainer = document.getElementById("requestList");
 
-  container.innerHTML = "Loading requests...";
+function loadRequests() {
+  fetch(`${API_URL}/api/requests`)
+    .then(res => res.json())
+    .then(data => {
+      requestContainer.innerHTML = "";
 
-  try {
-    const res = await fetch(`${API_BASE}/api/requests`);
-    const requests = await res.json();
+      const openRequests = data.filter(req => req.status === "open");
 
-    container.innerHTML = "";
+      if (openRequests.length === 0) {
+        requestContainer.innerHTML = "<p>No open requests available</p>";
+        return;
+      }
 
-    if (requests.length === 0) {
-      container.innerHTML = "<p>No requests found</p>";
-      return;
-    }
+      openRequests.forEach(req => {
+        const card = document.createElement("div");
+        card.className = "card";
 
-    requests.forEach(req => {
-      const div = document.createElement("div");
-      div.className = "card";
+        card.innerHTML = `
+          <h3>${req.title}</h3>
+          <p>${req.description}</p>
+          <p><strong>Status:</strong> ${req.status}</p>
+          <button onclick="acceptRequest('${req._id}')">Accept</button>
+        `;
 
-      div.innerHTML = `
-        <h3>${req.title}</h3>
-        <p>${req.description}</p>
-        <p>Status: <b>${req.status}</b></p>
-        ${
-          req.status === "open"
-            ? `<button onclick="acceptRequest('${req._id}')">Accept</button>`
-            : "<p style='color:green;'>Accepted</p>"
-        }
-      `;
-
-      container.appendChild(div);
+        requestContainer.appendChild(card);
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      requestContainer.innerHTML = "<p>Error loading requests</p>";
     });
-  } catch (err) {
-    container.innerHTML = "Error loading requests";
-    console.error(err);
-  }
 }
 
-async function acceptRequest(id) {
-  try {
-    await fetch(`${API_BASE}/api/requests/${id}/accept`, { method: "PUT" });
-    loadRequests();
-  } catch (err) {
-    console.error(err);
-  }
+function acceptRequest(id) {
+  fetch(`${API_URL}/api/requests/${id}/accept`, {
+    method: "PUT"
+  })
+    .then(res => res.json())
+    .then(() => {
+      window.location.href = "accepted.html";
+    })
+    .catch(err => {
+      console.error(err);
+      alert("Failed to accept request");
+    });
 }
 
-document.addEventListener("DOMContentLoaded", loadRequests);
+loadRequests();

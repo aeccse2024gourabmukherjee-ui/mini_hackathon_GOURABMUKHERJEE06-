@@ -52,40 +52,39 @@
 
   <!-- INLINE JAVASCRIPT -->
     <script>
-document.addEventListener("DOMContentLoaded", async () => {
-    const container = document.getElementById("acceptedList"); // ✅ FIXED ID
+      const API_URL = "https://mini-hackathon-gourabmukherjee06.onrender.com";
 
-    try {
-        const res = await fetch("http://localhost:3000/api/requests");
-        const data = await res.json();
+const acceptedContainer = document.getElementById("acceptedList");
 
-        container.innerHTML = "";
+fetch(`${API_URL}/api/requests`)
+  .then(res => res.json())
+  .then(data => {
+    acceptedContainer.innerHTML = "";
 
-        data.forEach(req => {
-            if (req.status !== "accepted") return;
-            if (!req.title || !req.description) return;
+    const acceptedRequests = data.filter(req => req.status === "accepted");
 
-            const card = document.createElement("div");
-            card.className = "card";
-
-            card.innerHTML = `
-                <h3>${req.title}</h3>
-                <p>${req.description}</p>
-                <small>Status: Accepted</small>
-            `;
-
-            container.appendChild(card);
-        });
-
-        if (container.innerHTML === "") {
-            container.innerHTML = "<p>No accepted requests yet.</p>";
-        }
-
-    } catch (err) {
-        console.error(err);
-        container.innerHTML = "<p>Error loading accepted requests.</p>";
+    if (acceptedRequests.length === 0) {
+      acceptedContainer.innerHTML = "<p>No accepted requests yet</p>";
+      return;
     }
-});
+
+    acceptedRequests.forEach(req => {
+      const card = document.createElement("div");
+      card.className = "card";
+
+      card.innerHTML = `
+        <h3>${req.title}</h3>
+        <p>${req.description}</p>
+        <p><strong>Status:</strong> Accepted</p>
+      `;
+
+      acceptedContainer.appendChild(card);
+    });
+  })
+  .catch(err => {
+    console.error(err);
+    acceptedContainer.innerHTML = "<p>Error loading accepted requests.</p>";
+  });
 
     
 </script>
