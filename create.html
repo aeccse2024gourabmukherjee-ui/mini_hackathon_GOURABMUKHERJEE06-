@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Create Request</title>
+  <base href="./">
 
   <style>
     body {
@@ -61,10 +62,12 @@
 
 <div class="box">
   <h2>Create Request</h2>
+  <form onsubmit="createRequest(event)">
 
   <input id="title" placeholder="Title">
   <textarea id="description" placeholder="Description"></textarea>
-  <button onclick="submitRequest()">Submit</button>
+  <button type="submit">Submit</button>
+</form>
 </div>
 
 <script src="script.js"></script>
