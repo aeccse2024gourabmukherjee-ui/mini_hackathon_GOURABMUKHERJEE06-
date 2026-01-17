@@ -108,6 +108,15 @@ Request categories
 Notifications for accepted requests
 Video or audio integration
 
+This project is a functional prototype demonstrating a peer-to-peer academic support platform.
+Authentication is planned as a future enhancement and can be easily integrated with the existing backend.
+🔑 Technologies (Planned for Authentication)
+Node.js
+Express.js
+MongoDB
+bcrypt
+JSON Web Tokens (JWT)
+
 
 🎯 Conclusion
 CampusConnect successfully demonstrates a peer-to-peer academic help system where students collaborate by requesting and providing help. The platform focuses on peer matching, making it scalable and extensible for future interaction features.
