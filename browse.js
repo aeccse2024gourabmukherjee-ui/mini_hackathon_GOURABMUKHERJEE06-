@@ -41,7 +41,7 @@ function acceptRequest(id) {
   })
     .then(res => res.json())
     .then(() => {
-      window.location.href = "accepted.html";
+      window.location.href = "./accepted.html";
     })
     .catch(err => {
       console.error(err);
