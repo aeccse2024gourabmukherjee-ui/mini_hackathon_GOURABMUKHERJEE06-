@@ -1,21 +1,32 @@
-function submitRequest() {
-    const title = document.getElementById("title").value;
-    const description = document.getElementById("description").value;
+function createRequest(event) {
+  event.preventDefault(); // 🔴 important for mobile & desktop
 
-    fetch("https://mini-hackathon-gourabmukherjee06.onrender.com/api/requests", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ title, description })
+  const title = document.getElementById("title").value.trim();
+  const description = document.getElementById("description").value.trim();
+
+  if (!title || !description) {
+    alert("Please fill all fields");
+    return;
+  }
+
+  fetch("https://mini-hackathon-gourabmukherjee06.onrender.com/api/requests", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      title,
+      description,
+      status: "pending",
+    }),
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      alert("Request created successfully");
+      window.location.href = "dashboard.html";
     })
-    .then(res => res.json())
-    .then(() => {
-        alert("Request created!");
-        window.location.href = "browse.html";
-    })
-    .catch(err => {
-        console.error(err);
-        alert("Backend not reachable");
+    .catch((err) => {
+      console.error(err);
+      alert("Failed to create request");
     });
 }
