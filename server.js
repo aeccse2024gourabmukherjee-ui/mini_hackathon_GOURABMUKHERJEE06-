@@ -9,6 +9,10 @@ app.use(cors());
 app.use(express.json());
 
 connectDB();
+app.get("/", (req, res) => {
+  res.send("CampusConnect Backend is running 🚀");
+});
+
 
 app.use("/auth", require("./routes/auth"));
 app.use("/api/requests", require("./routes/requests"));
