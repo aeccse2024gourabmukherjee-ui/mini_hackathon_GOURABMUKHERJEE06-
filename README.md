@@ -23,6 +23,18 @@ Accepted Requests
 Accepted requests are displayed separately.
 This stage represents a peer-to-peer match between two students.
 🔗 After acceptance, students can continue discussion or explanation outside the platform (chat, call, meet, etc.).
+AUTHENTICATION:
+CampusConnect implements a secure JWT-based authentication system to ensure that only registered users can access and interact with the platform.
+📝 User Registration
+Users register using Name, Email, and Password
+Passwords are hashed using bcrypt before storing in MongoDB
+Email is unique for every user to prevent duplicate accounts
+
+🔑 User Login
+Users log in using Email and Password
+Password is verified using bcrypt comparison
+On successful login, a JSON Web Token (JWT) is generated
+
 
 
 🤝 Why This Is Peer-to-Peer
